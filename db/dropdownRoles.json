@@ -1,0 +1,13 @@
+{
+    "850367215119499285": {
+        "message": "Get your roles below",
+        "roles": {
+            "roleName": {
+                "description": "description",
+                "emoji": "",
+                "roles": ["879655008675709018", "826185027263004673"]
+            }
+        },
+        "donttouch": "897042285097803816"
+    }
+}
