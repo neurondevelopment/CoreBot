@@ -63,7 +63,8 @@ This is an example of how to list things you need to use the software and how to
    ```
    https://discord.com/api/oauth2/authorize?client_id=YOURCLIENTID&permissions=8&scope=applications.commands%20bot
    ```
-5. Starting the bot
+5. In the discord developer dashboard, where you created your bot and got its token, scroll down to 'Privileged Gateway Intents' and tick the SERVER MEMBERS intent.
+6. Starting the bot
    ```sh
    node .
    ```
@@ -121,7 +122,10 @@ Tickets can be found in /db/tickets.json
     }
 }
 ```
+### Global Commands
+Some users may find they need to use global commands instead of guild commands, so that they can use the commands in multiple servers. Below is a simple guide for that, just note that any updates to commands will take ~1 hour to update in discord's cache when using global commands.
 
+In the index.js, replace `Routes.applicationGuildCommands(client.user.id, serverID)` with `Routes.applicationCommands(client.user.id)`, make sure you don't accidentally remove the comma after it either. 
 
 
 <!-- LICENSE -->
