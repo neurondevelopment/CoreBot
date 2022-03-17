@@ -1,9 +1,9 @@
 {
     "exampleTicket": {
-        "donttouch": "896522058547224576",
-        "messageChannelID": "848990909907730453",
-        "categoryID": "860615169972240414",
-        "supportroles": ["826185027263004673"],
+        "donttouch": "",
+        "messageChannelID": "",
+        "categoryID": "",
+        "supportroles": [""],
         "message": "Welcome to your ticket {[USER]}",
         "closeMessage": "Your ticket has been closed",
         "embed": {
