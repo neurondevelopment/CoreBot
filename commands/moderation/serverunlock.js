@@ -3,7 +3,6 @@ const utils = require('../../utils.js');
 const db = require('quick.db');
 const {  footer } = require('../../config.json');
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const utils = require('../../utils')
 
 module.exports = {
     perms: [],
