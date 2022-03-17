@@ -23,7 +23,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
- Core Bot is a multipurpose discord bot, to serve all users with many features to easily setup and manage your servers, as well as providing some fun commands for the members of your server. It was intended to be used in all types of discords, development, game servers, community servers, etc. We hope to bring you a free, reliable and up to date bot to fulfill your needs.
+Core Bot is a multipurpose discord bot, to serve all users with many features to easily setup and manage your servers, as well as providing some fun commands for the members of your server. It was intended to be used in all types of discords, development, game servers, community servers, etc. We hope to bring you a free, reliable and up to date bot to fulfill your needs.
 
 Some of the features:
 * Economy System (Balance, Pay, Coinflip, etc)
@@ -63,6 +63,66 @@ This is an example of how to list things you need to use the software and how to
    ```
    https://discord.com/api/oauth2/authorize?client_id=YOURCLIENTID&permissions=8&scope=applications.commands%20bot
    ```
+5. Starting the bot
+   ```sh
+   node .
+   ```
+   **OR**
+   
+   ```sh
+   node index.js
+   ```
+
+### Dropdown Roles
+They can be set / updated by running the `/sync` command
+
+
+Dropdown Roles can be found in /db/dropdownRoles.json
+
+```js
+"123456789": { // Enter the channel ID for the embed to be sent to
+        "message": "Get your roles below", // Message on the embed
+        "roles": {
+            "roleName": { // The name of the role shown in the dropdown menu
+                "description": "description",
+                "emoji": "",
+                "roles": [""] // The roles that this option will provide, specify the role IDs
+            }
+        },
+        "donttouch": "" // Message ID of the embed, will be filled out automatically by the bot
+    }
+```
+<br>
+
+### Tickets
+They can be set / updated by running the `/sync` command
+
+Tickets can be found in /db/tickets.json
+
+```js
+{
+    "exampleTicket": { // Name of the ticket, will be shown on the embed
+        "donttouch": "", // Message ID of the embed, will be filled out automatically by the bot
+        "messageChannelID": "", // The ID of the channel that the embed will be sent to
+        "categoryID": "", // The ID of the category that tickets will be added to
+        "supportroles": [""], // The support roles for this ticket type, will be able to claim tickets. Specify their Role IDs
+        "message": "Welcome to your ticket {[USER]}", // Message sent when the ticket is opened, use {[USER]} to ping the user
+        "closeMessage": "Your ticket has been closed", // Message sent to the user via DMs when their ticket is closed
+        "embed": {
+            "description": "This is an example ticket, click the button below to create!",
+            "colour": "AQUA",
+            "image": ""
+        },
+        "button": {
+            "label": "Open Ticket",
+            "buttonStyle": "SECONDARY",
+            "emoji": "🎫"
+        }
+    }
+}
+```
+
+
 
 <!-- LICENSE -->
 ## License
