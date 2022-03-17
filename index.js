@@ -339,7 +339,7 @@ client.on('interactionCreate', async (interaction) => {
         const command = client.commands.get(interaction.commandName);
         if (!command) return;
         try {
-            if(!command.perms.some(currPerm => interaction.member.permissions.has(currPerm) || interaction.member.roles.cache.some(role => role.id === currPerm))) return interaction.reply({ content: `You do not have permission to run this command!`, ephemeral: true })
+            if(command.perms[0] && !command.perms.some(currPerm => interaction.member.permissions.has(currPerm) || interaction.member.roles.cache.some(role => role.id === currPerm))) return interaction.reply({ content: `You do not have permission to run this command!`, ephemeral: true })
             await command.execute(interaction);
             const logChan = client.channels.cache.get(commandLogs) 
             if(logChan) {
