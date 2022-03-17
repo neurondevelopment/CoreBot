@@ -140,6 +140,6 @@ Distributed under the MIT License. See `LICENSE` for more information.
 [issues-shield]: https://img.shields.io/github/issues/neurondevelopment/CoreBot.svg?style=for-the-badge
 [issues-url]: https://github.com/neurondevelopment/CoreBot/issues
 [license-shield]: https://img.shields.io/github/license/neurondevelopment/CoreBot.svg?style=for-the-badge
-[license-url]: https://github.com/neurondevelopment/CoreBot/blob/master/LICENSE
+[license-url]: https://github.com/neurondevelopment/CoreBot/blob/main/LICENSE
 
 
