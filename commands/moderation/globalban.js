@@ -13,15 +13,17 @@ module.exports = {
         .addStringOption((option) => option.setName('reason').setDescription('The reason for the ban').setRequired(false)),
     async execute(interaction) {
 
-        const reason = interaction.options.get('reason') ? interaction.options.get('reason').value : 'No reason specified'
+        const reason = interaction.options.getString('reason') || 'No reason specified'
         const target = await interaction.guild.members.fetch(interaction.options.get('user').value)
 
         let num = 0;
         interaction.client.guilds.cache.forEach(server => {
-            server.members.ban(target, { reason: `${reason} - ${interaction.user.tag}`})
+            server.members.ban(target, { reason: `${reason} - ${interaction.user.tag}`}).catch(err => {
+                num -= 1
+            })
             num += 1;
         })
-        const loggingchannel = interaction.client.channels.cache.get(utils.sendLogs('globalban'))
+        const loggingchannel = interaction.client.channels.cache.get(utils.sendLogs('globalban')).catch(err => {})
 
         const embed = new Discord.MessageEmbed()
             .setColor(embedcolour)
@@ -36,7 +38,7 @@ module.exports = {
             .setTimestamp()
             .setFooter({ text: `${footer} - Made By Cryptonized`, iconURL: interaction.guild.iconURL()});
         interaction.reply({embeds: [embed]})
-        loggingchannel.send({embeds: [embed]});
+        if(loggingchannel) loggingchannel.send({embeds: [embed]}).catch(err => {})
         
 
     },
