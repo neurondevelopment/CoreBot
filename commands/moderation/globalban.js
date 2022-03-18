@@ -23,7 +23,7 @@ module.exports = {
             })
             num += 1;
         })
-        const loggingchannel = interaction.client.channels.cache.get(utils.sendLogs('globalban')).catch(err => {})
+        const loggingchannel = await interaction.client.channels.fetch(utils.sendLogs('globalban')).catch(err => {})
 
         const embed = new Discord.MessageEmbed()
             .setColor(embedcolour)
