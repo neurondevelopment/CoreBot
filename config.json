@@ -72,7 +72,9 @@
     },
     "commands": {
         "memes": {
-            "subreddits": "dankmemes,dank,meme,memes,dadjokes"
+            "subreddits": "dankmemes,dank,meme,memes,dadjokes",
+            "allowNSFW": false,
+            "topPosts": true
         },
         "globalban": {
             "embedcolour": "#9900cc",
