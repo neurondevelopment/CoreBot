@@ -11,7 +11,6 @@ module.exports = {
         .setDescription('Prevent @everyone from speaking until the specified time is over, or manually overwritten')
         .addStringOption((option) => option.setName('time').setDescription('How long to lock the channel for').setRequired(false)),
     async execute(interaction) {
-
         const target = interaction.channel;
         const time = interaction.options.get('time') ? interaction.options.get('time').value : '10m';
         if(!ms(time)) return interaction.reply({ content: 'Invalid time specified!', ephemeral: true });
@@ -34,16 +33,12 @@ module.exports = {
             .setTimestamp()
             .setFooter({ text: footer, iconURL: interaction.guild.iconURL()})
 
-        interaction.reply({embeds: [announceEmbed]}).then(msg => {
-            setTimeout(() => msg.delete(), ms(time));
-        });
+        interaction.reply({embeds: [announceEmbed]})
 
-
-        setTimeout(async function() {
+        setTimeout(async () => {
             await target.permissionOverwrites.edit(interaction.channel.guild.roles.everyone, { SEND_MESSAGES: null });
             interaction.channel.send({embeds: [uannounceEmbed]});
-          }, ms(time));
-
+        }, ms(time) );
 
         const logEmbed = new discord.MessageEmbed()
             .setColor('#f57c73')
@@ -59,7 +54,7 @@ module.exports = {
             .setTimestamp()
             .setFooter({ text: footer, iconURL: interaction.guild.iconURL()});
 
-            const loggingchannel = interaction.client.channels.cache.get(utils.sendLogs('lockdown'))
-            loggingchannel.send({embeds: [logEmbed]})
+            const loggingchannel = await interaction.client.channels.fetch(utils.sendLogs('lockdown')).catch(err => { })
+            if(loggingchannel) loggingchannel.send({embeds: [logEmbed]})
     },
 };
