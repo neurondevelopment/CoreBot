@@ -48,7 +48,7 @@ module.exports = {
             .setTimestamp()
             .setFooter({ text: footer, iconURL: interaction.guild.iconURL()})
 
-            const loggingchannel = interaction.client.channels.cache.get(utils.sendLogs('lockdown'))
-            loggingchannel.send({embeds: [logEmbed]})
+            const loggingchannel = await interaction.client.channels.fetch(utils.sendLogs('lockdown')).catch(err => { })
+            if(loggingchannel) loggingchannel.send({embeds: [logEmbed]})
         }
 };

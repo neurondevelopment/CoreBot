@@ -35,8 +35,8 @@ module.exports = {
         .setFooter({ text: `${footer} - Made By Cryptonized`, iconURL: interaction.guild.iconURL()})
 
     interaction.reply({embeds: [embed], ephemeral: true});
-    const loggingchannel = interaction.client.channels.cache.get(utils.sendLogs('timeout'))
-    loggingchannel.send({embeds: [embed]})
+    const loggingchannel = await interaction.client.channels.fetch(utils.sendLogs('timeout')).catch(err => { })
+    if(loggingchannel) loggingchannel.send({embeds: [embed]})
 
   },
 };

@@ -44,8 +44,8 @@ module.exports = {
             .setTimestamp()
             .setFooter({ text: `${footer} - Made By Cryptonized`, iconURL: interaction.guild.iconURL()})
 
-        const loggingchannel = interaction.client.channels.cache.get(utils.sendLogs('warn'))
-        loggingchannel.send({embeds: [logEmbed]})
+        const loggingchannel = await interaction.client.channels.fetch(utils.sendLogs('warn')).catch(err => { })
+        if(loggingchannel) loggingchannel.send({embeds: [logEmbed]})
 
     },
 };

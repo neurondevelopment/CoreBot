@@ -23,7 +23,7 @@ module.exports = {
             });
             num += 1;
         })
-        const loggingchannel = interaction.client.channels.cache.get(utils.sendLogs('globalkick'))
+        const loggingchannel = await interaction.client.channels.fetch(utils.sendLogs('globalkick')).catch(err => { })
         const embed = new Discord.MessageEmbed()
             .setColor(embedcolour)
             .setTitle('Globally Kicked Member')
@@ -37,7 +37,8 @@ module.exports = {
             .setTimestamp()
             .setFooter({ text: `${footer} - Made By Cryptonized`, iconURL: interaction.guild.iconURL()});
         interaction.reply({embeds: [embed]})
-        loggingchannel.send({embeds: [embed]});
+        
+        if(loggingchannel) loggingchannel.send({embeds: [embed]});
 
 
     },

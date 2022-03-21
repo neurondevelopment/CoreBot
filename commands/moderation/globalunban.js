@@ -26,7 +26,7 @@ module.exports = {
             .setTimestamp()
             .setFooter({ text: `${footer} - Made By Cryptonized`, iconURL: interaction.guild.iconURL()});
         interaction.reply({embeds: [embed]})
-        const loggingchannel = interaction.client.channels.cache.get(utils.sendLogs('globalunban'))
-        loggingchannel.send({embeds: [embed]})
+        const loggingchannel = await interaction.client.channels.fetch(utils.sendLogs('globalunban')).catch(err => { })
+        if(loggingchannel) loggingchannel.send({embeds: [embed]})
     },
 };
