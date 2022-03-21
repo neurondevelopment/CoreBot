@@ -1,7 +1,8 @@
+const { modLogs, commandLogs } = require('./config.json').logs
+const all = require('./config.json').commands
+
 module.exports = {
     sendLogs: function(a) {
-        const { modLogs, commandLogs } = require('./config.json').logs
-        const all = require('./config.json').commands
         let log = null;
         for(var i in all) {
             if(i === a) {
