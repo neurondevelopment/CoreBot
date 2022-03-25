@@ -145,20 +145,22 @@ const verifyEmbed1 = new Discord.MessageEmbed()
     .setImage('attachment://captcha.png')
     .setFooter(`${footer} - Made By Donny`)
     .setTimestamp()
-    const verifyDM = member.guild.channels.cache.find(c => c.id === captchaDMCLOSEDID);
+    const verifyDM = await member.guild.channels.fetch(c => c.id === captchaDMCLOSEDID);
 
-    const msg = await member.send({files: [captchaAttachment], embeds: [captchaEmbed],}).catch(() => verifyDM.send(`<@${member.id}> Please enable your dms so I can send you the captcha, one you have enabled your dms rejoin the server. https://media.discordapp.net/attachments/682375042570780830/682407020795920465/rLBBFm8iCy.gif`));
+    const msg = await member.send({files: [captchaAttachment], embeds: [captchaEmbed]}).catch(() => verifyDM.send(`<@${member.id}> Please enable your dms so I can send you the captcha, one you have enabled your dms rejoin the server. https://media.discordapp.net/attachments/682375042570780830/682407020795920465/rLBBFm8iCy.gif`));
 
 
     const filter = (message => {
         if(message.author.id !== member.id) return;
-        if(message.content == captcha.text) return true;
-        else member.send("Wrong Captcha").catch(() => verifyDM.send(`<@${member.id}> Please enable your dms so I can send you the captcha, one you have enabled your dms rejoin the server. https://media.discordapp.net/attachments/682375042570780830/682407020795920465/rLBBFm8iCy.gif`));
-
+        if(message.content == captcha.text) {
+		return true
+	}
+        else {
+		member.send("Wrong Captcha").catch(() => verifyDM.send(`<@${member.id}> Please enable your dms so I can send you the captcha, one you have enabled your dms rejoin the server. https://media.discordapp.net/attachments/682375042570780830/682407020795920465/rLBBFm8iCy.gif`));
+	}
     })
     try {
-    const response = await msg.channel.awaitMessages({
-        filter, max: 1, time: captchaTIMEms,errors: ['time'] });
+    	const response = await msg.channel.awaitMessages({ filter, max: 1, time: captchaTIMEms,errors: ['time'] });
         if(response) {
             member.send({content: 'Successfully Verified'});
             member.roles.add(captchaMemberID);
