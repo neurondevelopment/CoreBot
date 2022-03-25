@@ -555,10 +555,10 @@ client.on('guildMemberAdd', async member => {
         if(channel) {
 	const mes = joinMessage.split('{[USER]}').join(`<@${member.id}>`).split('{[SERVER]}').join(`${member.guild.name}`)
 	const mssembed = new Discord.MessageEmbed()
-	.setTitle(mes)
+	.setTitle("Welcome!")
 	.setColor('#000000')
 	.setThumbnail(member.guild.iconURL())
-        .setDescription(`Greetings <@${member.user.id}>, ${mes}`)
+        .setDescription(mes)
 	.setTimestamp()
 	channel.send({embeds: [mssembed]});
         }
