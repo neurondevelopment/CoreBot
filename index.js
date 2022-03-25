@@ -555,7 +555,7 @@ client.on('guildMemberAdd', async member => {
         if(channel) {
 	const mes = joinMessage.split('{[USER]}').join(`<@${member.id}>`).split('{[SERVER]}').join(`${member.guild.name}`)
 	const mssembed = new Discord.MessageEmbed()
-	.setTitle(`Weclome to ${member.guild.name}`)
+	.setTitle(mes)
 	.setColor('#000000')
 	.setThumbnail(member.guild.iconURL())
         .setDescription(`Greetings <@${member.user.id}>, ${mes}`)
