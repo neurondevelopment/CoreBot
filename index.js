@@ -552,10 +552,14 @@ client.on('guildMemberAdd', async member => {
         }
         const channel = client.channels.cache.get(joinChannel)
         if(channel) {
-            const mes = joinMessage.split('{[USER]}').join(`<@${member.id}>`).split('{[SERVER]}').join(`${member.guild.name}`)
-            channel.send(mes).catch(err => {
-                console.log(err)
-            })
+	const mes = joinMessage
+	const mssembed = new Discord.MessageEmbed()
+	.setTitle(`Weclome to ${member.guild.name}`)
+	.setColor('#000000')
+	.setThumbnail(member.guild.iconURL())
+        .setDescription(`Greetings <@${member.user.id}>, ${mes}`)
+	.setTimestamp()
+	channel.send({embeds: [mssembed]});
         }
         const accountAge = Math.round((Date.now() - member.user.createdAt) / 86400000);
         const delEmbed2 = new Discord.MessageEmbed()
