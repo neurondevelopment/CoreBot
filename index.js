@@ -9,6 +9,7 @@ const { serverLogs, joinLeaveLogs, commandLogs } = require('./config.json').logs
 const { enabled, sendEvery } = require('./config.json').stickyMessages
 const { captchaLOGID,captchaDMCLOSEDID,captchaMemberID,captchaTIMEms,captchaEnable } = require('./config.json').captcha
 const { MessageAttachment} = require("discord.js");
+const { Captcha } = require("captcha-canvas");
 
 const client  = new Discord.Client({
     partials: ['CHANNEL', 'MESSAGE', "REACTION", 'GUILD_MEMBER'],
