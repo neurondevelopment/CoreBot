@@ -553,7 +553,7 @@ client.on('guildMemberAdd', async member => {
         }
         const channel = client.channels.cache.get(joinChannel)
         if(channel) {
-	const mes = joinMessage
+	const mes = joinMessage.split('{[USER]}').join(`<@${member.id}>`).split('{[SERVER]}').join(`${member.guild.name}`)
 	const mssembed = new Discord.MessageEmbed()
 	.setTitle(`Weclome to ${member.guild.name}`)
 	.setColor('#000000')
