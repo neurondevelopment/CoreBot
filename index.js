@@ -28,6 +28,12 @@ for (const folder of commandFolders) {
 	}
 }
 
+process.on('unhandledRejection', (reason, promise) => {
+    const pr = Promise.resolve(promise);
+    console.log(`Unhandled Rejection at: ${reason.stack || reason} | ${pr}`);
+
+});
+
 
 client.on('ready', async () => {
     const rest = new REST({ version: '9' }).setToken(token);
