@@ -7,6 +7,9 @@ const { ticketInfoColour, enableTranscriptDMs, transcriptChannelID } = require('
 const { levelsEnabled, autoDeleteAfter, xpNeededPerLevel } = require('./config.json').level
 const { serverLogs, joinLeaveLogs, commandLogs } = require('./config.json').logs
 const { enabled, sendEvery } = require('./config.json').stickyMessages
+const { captchaLOGID,captchaDMCLOSEDID,captchaMemberID,captchaTIMEms,captchaEnable } = require('./config.json').captcha
+const { MessageAttachment} = require("discord.js");
+const { Captcha } = require("captcha-canvas");
 
 const client  = new Discord.Client({
     partials: ['CHANNEL', 'MESSAGE', "REACTION", 'GUILD_MEMBER'],
@@ -112,6 +115,73 @@ function xp(message) {
         }
     }
 }
+
+client.on("guildMemberAdd", async (member) => {
+    if(!captchaEnable) return;
+    const captcha = new Captcha();
+    captcha.async = true;
+    captcha.addDecoy();
+    captcha.drawTrace();
+    captcha.drawCaptcha();
+
+const verifyEmbed = new Discord.MessageEmbed()
+.setColor('#024F33')
+.setAuthor("Member Joined")
+.setDescription(`Member \`${member.user.tag}\` successfully verified`)
+.setThumbnail(member.user.avatarURL())
+.addField("Member ID", `${member.id}`)
+.addField('Join Date', `${member.joinedAt}`)
+.setTimestamp()
+.setFooter(`${footer} - Made by Donny`);
+
+const verifyEmbed1 = new Discord.MessageEmbed()
+.setColor('ORANGE')
+.setAuthor(`${member.user.tag}`, member.user.avatarURL())
+.setDescription(`Kicked for failing to verify within the ${captchaTIMEms} ms limit`)
+.setTimestamp()
+.setFooter(`User ID: ${member.user.id}`, member.guild.iconURL());
+
+    const captchaAttachment = new MessageAttachment(
+        await captcha.png,
+        "captcha.png"
+    );
+
+    const captchaEmbed = new Discord.MessageEmbed()
+    .setDescription("Please Complete This Captcha")
+    .setImage('attachment://captcha.png')
+    .setFooter(`${footer} - Made By Donny`)
+    .setTimestamp()
+    const verifyDM = await member.guild.channels.fetch(c => c.id === captchaDMCLOSEDID);
+
+    const msg = await member.send({files: [captchaAttachment], embeds: [captchaEmbed]}).catch(() => verifyDM.send(`<@${member.id}> Please enable your dms so I can send you the captcha, one you have enabled your dms rejoin the server. https://media.discordapp.net/attachments/682375042570780830/682407020795920465/rLBBFm8iCy.gif`));
+
+
+    const filter = (message => {
+        if(message.author.id !== member.id) return;
+        if(message.content == captcha.text) {
+		return true
+	}
+        else {
+		member.send("Wrong Captcha").catch(() => verifyDM.send(`<@${member.id}> Please enable your dms so I can send you the captcha, one you have enabled your dms rejoin the server. https://media.discordapp.net/attachments/682375042570780830/682407020795920465/rLBBFm8iCy.gif`));
+	}
+    })
+    try {
+    	const response = await msg.channel.awaitMessages({ filter, max: 1, time: captchaTIMEms,errors: ['time'] });
+        if(response) {
+            member.send({content: 'Successfully Verified'});
+            member.roles.add(captchaMemberID);
+            const verifyLog = member.guild.channels.cache.find(c => c.id === captchaLOGID);
+            verifyLog.send({embeds: [verifyEmbed]});
+
+        }
+    } catch (err) {
+        member.send(`You have been kicked for failing to verify within the ${captchaTIMEms} ms limit`).catch(() => verifyDM.send(`<@${member.id}> Please enable your dms so I can send you the captcha, one you have enabled your dms rejoin the server. https://media.discordapp.net/attachments/682375042570780830/682407020795920465/rLBBFm8iCy.gif`));
+        const verifyLog = member.guild.channels.cache.find(c => c.id === captchaLOGID);
+        verifyLog.send({embeds: [verifyEmbed1]});
+        member.kick(`Failed to verify within the ${captchaTIMEms} ms limit`);
+        
+    }
+});
 
 client.on('messageCreate', message => {
     if(message.guild) {
@@ -491,10 +561,14 @@ client.on('guildMemberAdd', async member => {
         }
         const channel = client.channels.cache.get(joinChannel)
         if(channel) {
-            const mes = joinMessage.split('{[USER]}').join(`<@${member.id}>`).split('{[SERVER]}').join(`${member.guild.name}`)
-            channel.send(mes).catch(err => {
-                console.log(err)
-            })
+	const mes = joinMessage.split('{[USER]}').join(`<@${member.id}>`).split('{[SERVER]}').join(`${member.guild.name}`)
+	const mssembed = new Discord.MessageEmbed()
+	.setTitle("Welcome!")
+	.setColor('#000000')
+	.setThumbnail(member.guild.iconURL())
+        .setDescription(mes)
+	.setTimestamp()
+	channel.send({embeds: [mssembed]});
         }
         const accountAge = Math.round((Date.now() - member.user.createdAt) / 86400000);
         const delEmbed2 = new Discord.MessageEmbed()

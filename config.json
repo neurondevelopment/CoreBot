@@ -9,6 +9,13 @@
     "joinMessage": "Hello {[USER]}, Welcome To {[SERVER]}",
     "leaveChannel": "Channel ID",
     "leaveMessage": "{[USER]} has left the server",
+    "captcha": {
+        "captchaEnable": false,
+        "captchaLOGID": "Channel ID For Logging",
+        "captchaDMCLOSEDID": "Channel ID To Notify User Closed DMS",
+        "captchaMemberID": "Role ID of role you want to give",
+        "captchaTIMEms": 3600000
+    },
     "status": {
         "type": "WATCHING",
         "content": "Neuron Development"
