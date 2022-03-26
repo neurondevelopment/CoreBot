@@ -14,15 +14,17 @@ module.exports = {
     async execute(interaction) {
 
         const reason = interaction.options.getString('reason') || 'No reason specified'
-        const target = await interaction.guild.members.fetch(interaction.options.get('user').value)
+        const target = interaction.options.getMember('user')
 
         let num = 0;
+        
         interaction.client.guilds.cache.forEach(server => {
-            server.members.ban(target, { reason: `${reason} - ${interaction.user.tag}`}).catch(err => {
+            server.bans.create(target.user, { reason: `${reason} - ${interaction.user.tag}`}).catch(err => {
                 num -= 1
             })
             num += 1;
         })
+        
         const loggingchannel = await interaction.client.channels.fetch(utils.sendLogs('globalban')).catch(err => {})
 
         const embed = new Discord.MessageEmbed()
