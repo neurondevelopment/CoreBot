@@ -12,8 +12,13 @@ module.exports = {
             option.setName('choice')
                 .setDescription('Heads or Tails')
                 .setRequired(true)
-                .addChoice('Heads', 'heads')
-                .addChoice('Tails', 'tails')),
+                .addChoices({
+                name: 'Tails', 
+                value: 'tails'})
+                .addChoices({
+                name: 'Heads', 
+                value: 'heads'
+                 })),
     execute(interaction) {
         if(!enabled) return;
         const balance = db.get(`wallet.${interaction.user.id}`);
