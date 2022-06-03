@@ -10,8 +10,12 @@ module.exports = {
             option.setName('choice')
                 .setDescription('Add or Remove')
                 .setRequired(true)
-                .addChoice('Add', 'add')
-                .addChoice('Remove', 'remove'))
+                .addChoices(
+                    { 
+                        name: 'Add', value: 'add',
+                        name: 'Remove ', value: 'remove'
+                    }
+                ))
         .addStringOption(option => option.setName('roleid').setDescription('ID of the role').setRequired(true)),
     execute(interaction) {
         if(!interaction.member.permissions.has('ADMINISTRATOR')) return interaction.reply({ content: 'You do not have permission to run this command', ephemeral: true });
