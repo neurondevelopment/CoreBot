@@ -5,6 +5,7 @@
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/V7V54KONZ)
 
 <!-- PROJECT LOGO -->
 <br />
@@ -73,6 +74,17 @@ This is an example of how to list things you need to use the software and how to
    ```sh
    node index.js
    ```
+   
+### Permissions
+By default, every command is open for everyone, which is maybe not ideal for some commands such as moderation commands. 
+In each command file, there is an array called perms, it looks like perms: []
+Inside, you can add either a role ID or a permission to use that command, a role id looking like "843429294848081920", or a permission looking like "ADMINISTRATOR"
+
+The final array should look something like
+```js
+perms: ["843429294848081920", "MANAGE_MESSAGES"]
+```
+This will allow anyone with the role that has the ID 843429294848081920, or anyone with the manage messages permission to run this command
 
 ### Dropdown Roles
 They can be set / updated by running the `/sync` command
