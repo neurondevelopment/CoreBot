@@ -15,8 +15,8 @@ module.exports = async (client) => {
                     port: server.port,
                     maxAttempts: 3
                 }).then(async info => { 
-                    const players = info.players.map(player => `${player.name.substring(0, 20)} ${(player.raw && player.raw.ping) ? `(${player.raw.ping}ms)` : ''}`)
-                    if(players.length > 40) players.length = 40
+                    const players = info.players.map(player => `${player.name.substring(0, 20)} ${(player.raw && player.raw.ping) ? `(${player.raw.ping}ms)` : ''}`) // Map player names to also include ping, and only allow 20 characters per name
+                    if(players.length > 40) players.length = 40  // Only allow 40 players to be shown to not exceed the embed limits
 
                     const embed = new Discord.MessageEmbed()
                         .setTitle(info.name)
@@ -26,25 +26,25 @@ module.exports = async (client) => {
                             { name: 'Connected Players', value: `\`\`\`${players.length > 0 ? players.join('\n') : 'No Players Online'}\`\`\``, inline: false}
                         )
                     const message = channel.messages.cache.get(msgId) || await channel.messages.fetch(msgId).catch(err => { })
-                    if(message) {
+                    if(message) { // If message already exists, edit the existing one
                         message.edit({ embeds: [embed] })
                     }
-                    else {
+                    else { // If message doesn't exist, send a new one and update the config with it's ID
                         const msg = await channel.send({ embeds: [embed]})
                         const fullConfig = JSON.parse(fs.readFileSync('./config.json'))
                         fullConfig.modules["server-status"].servers[config.servers.indexOf(server)].messageId = msg.id
                         fs.writeFileSync('./config.json', JSON.stringify(fullConfig, null, 4))
                     }
-                }).catch(async err => {
+                }).catch(async err => { // Caught error so we assume the server is offline
                     const embed = new Discord.MessageEmbed()
                         .setColor('RED')
                         .setDescription(`Server is offline`)
 
                     const message = channel.messages.cache.get(msgId) || await channel.messages.fetch(msgId).catch(err => { })
-                    if(message) {
+                    if(message) { // If message already exists, edit the existing one
                         message.edit({ embeds: [embed] })
                     }
-                    else {
+                    else { // If message doesn't exist, send a new one and update the config with it's ID
                         const msg = await channel.send({ embeds: [embed]})
                         const fullConfig = JSON.parse(fs.readFileSync('./config.json'))
                         fullConfig.modules["server-status"].servers[config.servers.indexOf(server)].messageId = msg.id
