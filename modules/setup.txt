@@ -1,0 +1,43 @@
+This file contains setup information for each module.
+
+server-status:
+- In the config.json, configure the first server with a channelId, game type, ip and port. The messageId will be automatically filled out
+- You can find the game types here https://www.npmjs.com/package/gamedig at the games list, use the GameDig Type ID
+- The displayConnectionInfo is a string, you can use {ip} and {port} which are automatically filled by the bot. It will display in the embed, you can add other messages along with it, such as steamconnect or only showing the IP
+- To add more servers, simply copy the object and paste it, ensuring there is a comma between. Below is an example of 3 servers
+
+"servers": [
+    {
+        "channelId": "",
+        "messageId": "",
+        "game": "fivem",
+        "ip": "",
+        "port": "",
+        "displayConnectionInfo": "steamconnect://{ip}:{port}"
+    },
+    {
+        "channelId": "",
+        "messageId": "",
+        "game": "minecraft",
+        "ip": "",
+        "port": "",
+        "displayConnectionInfo": "{ip}:{port}"
+    },
+    {
+        "channelId": "",
+        "messageId": "",
+        "game": "arma3",
+        "ip": "",
+        "port": "",
+        "displayConnectionInfo": "{ip}"
+    }
+]
+
+-----------------------------------------------------------------
+
+captcha:
+- The captcha system prevents bots from joining your server, by presenting them a captcha to solve within the given time limit
+- If a user has their DMs closed, the bot will automatically kick them after 10 seconds, to prevent bots sitting in your server sending mass advertisements, it will send a message to your specified channel, but if you don't want to kick them, you could disable this in the code but it isn't recommended
+- The config is very straight forward, the only complicated thing may be the memberRoles array if you don't know how they work. Simply place the role IDs in an array, for example: "memberRoles": ["roleID1", "roleID2"]
+
+
