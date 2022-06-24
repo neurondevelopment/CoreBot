@@ -11,10 +11,8 @@ module.exports = {
                 .setDescription('Add or Remove')
                 .setRequired(true)
                 .addChoices(
-                    { 
-                        name: 'Add', value: 'add',
-                        name: 'Remove ', value: 'remove'
-                    }
+                    { name: 'Add', value: 'add' },
+                    { name: 'Remove ', value: 'remove' }
                 ))
         .addStringOption(option => option.setName('roleid').setDescription('ID of the role').setRequired(true)),
     execute(interaction) {

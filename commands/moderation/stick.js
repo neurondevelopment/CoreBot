@@ -11,10 +11,8 @@ module.exports = {
                 .setDescription('Set Or Remove')
                 .setRequired(true)
                 .addChoices(
-                    { 
-                        name: 'Set', value: 'set',
-                        name: 'Remove ', value: 'remove'
-                    }
+                    { name: 'Set', value: 'set' },
+                    { name: 'Remove ', value: 'remove' }
                 ))
         .addStringOption((option) => option.setName('message').setDescription('The message to stick').setRequired(true)),
     async execute(interaction) {

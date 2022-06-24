@@ -13,10 +13,8 @@ module.exports = {
                 .setDescription('Heads or Tails')
                 .setRequired(true)
                 .addChoices(
-                    { 
-                        name: 'Heads', value: 'heads',
-                        name: 'Tails ', value: 'tails'
-                    }
+                    { name: 'Heads', value: 'heads' },
+                    { name: 'Tails ', value: 'tails' }
                 )),
     execute(interaction) {
         if(!enabled) return;
