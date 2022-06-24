@@ -1,6 +1,6 @@
 {
     "token": "Discord Bot Token",
-    "footer": "TEST",
+    "footer": "Neuron Development",
     "serverID": "Discord Server ID",
     "defaultEmbedColour": "RANDOM",
     "memberCountChannelName": "Members - ",
@@ -9,13 +9,6 @@
     "joinMessage": "Hello {[USER]}, Welcome To {[SERVER]}",
     "leaveChannel": "Channel ID",
     "leaveMessage": "{[USER]} has left the server",
-    "captcha": {
-        "captchaEnable": false,
-        "captchaLOGID": "Channel ID For Logging",
-        "captchaDMCLOSEDID": "Channel ID To Notify User Closed DMS",
-        "captchaMemberID": "Role ID of role you want to give",
-        "captchaTIMEms": 3600000
-    },
     "status": {
         "type": "WATCHING",
         "content": "Neuron Development"
@@ -56,14 +49,14 @@
     "economy": {
         "enabled": true,
         "currency": "$",
-        "moneyOnLevel": true, 
+        "moneyOnLevel": true,
         "amountPerLevel": 200,
         "maxRobPercent": 75,
         "maxRobTimeout": 600000,
         "bonus": {
             "amount": 200,
             "timeout": 86400000,
-            "embedcolour": "RANDOM" 
+            "embedcolour": "RANDOM"
         },
         "work": {
             "jobs": "Teacher,Builder,Firefighter,Doctor,Chef,Mechanic,Pro Fortnite Player",
@@ -75,6 +68,28 @@
             "maxNormal": 750,
             "minHard": 500,
             "maxHard": 1000
+        }
+    },
+    "modules": {
+        "server-status": {
+            "enabled": false,
+            "servers": [
+                {
+                    "channelId": "",
+                    "messageId": "",
+                    "game": "",
+                    "ip": "",
+                    "port": "",
+                    "displayConnectionInfo": "{ip}:{port}"
+                }
+            ]
+        },
+        "captcha": {
+            "enabled": true,
+            "loggingChannelId": "856282362270056448",
+            "closedDmChannelId": "856282362270056448",
+            "memberRoles": [],
+            "maximumTime": 3600000
         }
     },
     "commands": {
