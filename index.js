@@ -2,7 +2,8 @@ const Discord = require('discord.js');
 const fs = require('fs');
 const figlet = require('figlet');
 const db = require('quick.db');
-const { token, footer, licenseKey, memberCountChannel, memberCountChannelName, joinChannel, joinMessage, leaveChannel, leaveMessage, serverID } = require('./config.json');
+const undici = require('undici')
+const { token, footer, memberCountChannel, memberCountChannelName, joinChannel, joinMessage, leaveChannel, leaveMessage, serverID } = require('./config.json');
 const { ticketInfoColour, enableTranscriptDMs, transcriptChannelID } = require('./config.json').tickets
 const { levelsEnabled, autoDeleteAfter, xpNeededPerLevel } = require('./config.json').level
 const { serverLogs, joinLeaveLogs, commandLogs } = require('./config.json').logs
@@ -34,8 +35,22 @@ process.on('unhandledRejection', (reason, promise) => {
 
 });
 
+async function checkVersion() {
+    const bot = 'CoreBot'
+    const req = await undici.request(`https://raw.githubusercontent.com/neurondevelopment/${bot}/main/package.json`)
+    const data = await req.body.json()
+    if(data.version > require('./package.json').version) {
+        console.log('\x1b[33m%s\x1b[0m', `New version available, please update to v${data.version} at https://github.com/neurondevelopment/${bot}`)
+    }
+}
+
+setInterval(() => {
+    checkVersion()
+}, 300000)
+
 
 client.on('ready', async () => {
+    checkVersion()
     const rest = new REST({ version: '9' }).setToken(token);
 
     (async () => {
@@ -510,6 +525,7 @@ client.on('guildMemberAdd', async member => {
 	.setThumbnail(member.guild.iconURL())
         .setDescription(mes)
 	.setTimestamp()
+
 	channel.send({embeds: [mssembed]});
         }
         const accountAge = Math.round((Date.now() - member.user.createdAt) / 86400000);
