@@ -26,7 +26,7 @@
     "logs": {
         "commandLogs": "Channel ID",
         "modLogs": "Channel ID",
-        "serverLogs": "1013586546722619483",
+        "serverLogs": "Channel ID",
         "joinLeaveLogs": "Channel ID"
     },
     "level": {
@@ -141,6 +141,9 @@
         },
         "warn": {
             "embedcolour": "#C19198",
+            "logs": "mod"
+        },
+        "temprole": {
             "logs": "mod"
         }
     }

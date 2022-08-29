@@ -1,12 +1,12 @@
 const Discord = require('discord.js');
-const { Routes, ActivityType } = require('discord.js')
+const { Routes, ActivityType, EmbedBuilder } = require('discord.js')
 const { QuickDB } = require('quick.db')
 const db = new QuickDB()
 const fs = require('fs');
 const figlet = require('figlet');
 const undici = require('undici')
-const { token, memberCountChannel, memberCountChannelName, serverID } = require('./config.json');
-const { error } = require('./utils')
+const { token, memberCountChannel, memberCountChannelName, serverID, footer } = require('./config.json');
+const { error, sendLogs } = require('./utils')
 const client  = new Discord.Client({
     intents: 46791
 });
@@ -95,6 +95,34 @@ client.on('ready', async () => {
         if(!ActivityType[type]) return error('Bot Status Config', `Invalid activity type: ${type}`)
         client.user.setActivity(content, { type: ActivityType[type] })
     }
+
+    setInterval(async () => {
+        const roleDB = JSON.parse(fs.readFileSync('./db/temproles.json'))
+        for(const guildID in roleDB) {
+            for(const userID in roleDB[guildID]) {
+                const guild = await client.guilds.fetch(guildID).catch(err => {})
+                if(!guild) return error('Temp Role', `Guild not found: ${guildID}`)
+                const member = await guild.members.fetch(userID).catch(err => {})
+                if(!member) delete roleDB[guildID][userID]
+                roleDB[guildID][userID].forEach(async role => {
+                    if(role.time < Date.now()) {
+                        member.roles.remove(role.role)
+                        roleDB[guildID][userID].splice(roleDB[guildID][userID].indexOf(role), 1)
+                        const embed = new EmbedBuilder()
+                            .setColor('Red')
+                            .setTitle('Temp Role Removed')
+                            .setDescription(`Successfully removed the role with ID \`${role.role}\` from user <@${userID}> (\`${userID}\`)`)
+                            .setTimestamp()
+                            .setFooter({ text: `${footer} - Made By Cryptonized` });
+                        const loggingChannel = await client.channels.fetch(sendLogs('temprole')).catch(err => { })
+                        if(loggingChannel) loggingChannel.send({embeds: [embed]})
+                    }
+                })
+                fs.writeFileSync('./db/temproles.json', JSON.stringify(roleDB))
+                
+            }
+        }
+    }, 60 * 1000)
 
 })
 
