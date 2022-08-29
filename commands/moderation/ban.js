@@ -1,29 +1,30 @@
-const Discord = require('discord.js');
 const { footer } = require('../../config.json')
-const { perms, embedcolour } = require('../../config.json').commands.ban
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const utils = require('../../utils')
+const { embedcolour } = require('../../config.json').commands.ban
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js')
+const { sendLogs, checkPerms } = require('../../utils')
 
 module.exports = {
     perms: [],
+    requirePermEmbed: true,
     data: new SlashCommandBuilder()
         .setName('ban')
         .setDescription('Ban a user')
         .addUserOption((option) => option.setName('user').setDescription('The user to ban').setRequired(true))
         .addStringOption((option) => option.setName('reason').setDescription('The reason for the ban').setRequired(false)),
     async execute(interaction) {
+        const reason = interaction.options.getString('reason') || 'No reason specified'
+        const target = interaction.options.getMember('user')
+        const permCheck = checkPerms(interaction.member, target)
+        if(permCheck) return interaction.reply({ content: permCheck, ephemeral: true })
 
-        const reason = interaction.options.get('reason') ? interaction.options.get('reason').value : 'No reason specified'
-        const target = await interaction.guild.members.fetch(interaction.options.get('user').value)
-
-        let fail;
+        let failed;
         await interaction.guild.members.ban(target, { reason: `${reason} - ${interaction.user.tag}`})
             .catch(err => {
-                fail = true;
+                failed = true;
                 interaction.reply({ content: 'Unable to ban that user', ephemeral: true })
             })
         if(fail) return;
-        const embed = new Discord.MessageEmbed()
+        const embed = new EmbedBuilder()
             .setColor(embedcolour)
             .setTitle('Banned Member')
             .setThumbnail(target.user.displayAvatarURL())
@@ -37,8 +38,8 @@ module.exports = {
             .setFooter({ text: `${footer} - Made By Cryptonized`, iconURL: interaction.guild.iconURL()});
 
         interaction.reply({ embeds: [embed] });
-        const loggingchannel = await interaction.client.channels.fetch(utils.sendLogs('ban')).catch(err => { })
-        if(loggingchannel) loggingchannel.send({embeds: [embed]})
+        const loggingChannel = await interaction.client.channels.fetch(sendLogs('ban')).catch(err => { })
+        if(loggingChannel) loggingChannel.send({embeds: [embed]})
 
     },
 };

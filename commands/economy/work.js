@@ -1,20 +1,19 @@
 const ms = require('ms');
-const Discord = require('discord.js');
-const db = require('quick.db');
+const { db } = require('../../index')
 const { currency, enabled } = require('../../config.json').economy
 const { timeout, minHard, maxHard, minNormal, maxNormal, workHardChance, hardembedcolour, normalembedcolour } = require('../../config.json').economy.work
 let { jobs } = require('../../config.json').economy.work
 jobs = jobs.split(',')
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js')
 
 module.exports = {
     perms: [],
     data: new SlashCommandBuilder()
         .setName('work')
         .setDescription('Get money from working'),
-    execute(interaction) {
+    async execute(interaction) {
         if(!enabled) return;
-        const author = db.get(`work.${interaction.user.id}`);
+        const author = await db.get(`work.${interaction.user.id}`);
 
         if (author !== null && timeout - (Date.now() - author) > 0) {
             const time = ms(timeout - (Date.now() - author));
@@ -29,7 +28,7 @@ module.exports = {
 
             if (hard == 1) {
                 amount = Math.floor(Math.random() * (maxHard - minHard)) + 1 + minHard;
-                const embed = new Discord.MessageEmbed()
+                const embed = new EmbedBuilder()
                     .setColor(hardembedcolour)
                     .setAuthor({ name: interaction.user.tag, iconURL: interaction.user.displayAvatarURL()})
                     .setDescription(`You worked hard as a \`${jobs[result]}\` and earned ${amount} ${currency}`);
@@ -37,15 +36,15 @@ module.exports = {
             }
             else {
                 amount = Math.floor(Math.random() * (maxNormal - minNormal)) + 1 + minNormal;
-                const embed = new Discord.MessageEmbed()
+                const embed = new EmbedBuilder()
                     .setColor(normalembedcolour)
                     .setAuthor({ name: interaction.user.tag, iconURL: interaction.user.displayAvatarURL()})
                     .setDescription(`You worked as a \`${jobs[result]}\` and earned ${amount} ${currency}`);
                 interaction.reply({ embeds: [embed], ephemeral: true})
             }
 
-            db.add(`wallet.${interaction.user.id}`, amount);
-            db.set(`work.${interaction.user.id}`, Date.now());
+            await db.add(`wallet.${interaction.user.id}`, amount);
+            await db.set(`work.${interaction.user.id}`, Date.now());
         }
     },
 };

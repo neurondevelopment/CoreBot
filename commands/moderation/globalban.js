@@ -1,33 +1,32 @@
-const Discord = require('discord.js');
 const { footer } = require('../../config.json')
 const { embedcolour } = require('../../config.json').commands.globalban
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const utils = require('../../utils')
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js')
+const { sendLogs, checkPerms } = require('../../utils')
 
 module.exports = {
     perms: [],
+    requirePermEmbed: true,
     data: new SlashCommandBuilder()
         .setName('globalban')
         .setDescription('Ban a user from all servers the bot is in')
         .addUserOption((option) => option.setName('user').setDescription('The user to ban').setRequired(true))
         .addStringOption((option) => option.setName('reason').setDescription('The reason for the ban').setRequired(false)),
     async execute(interaction) {
-
         const reason = interaction.options.getString('reason') || 'No reason specified'
         const target = interaction.options.getMember('user')
-
         let num = 0;
+        const permCheck = checkPerms(interaction.member, target)
+        if(permCheck) return interaction.reply({ content: permCheck, ephemeral: true })
         
         interaction.client.guilds.cache.forEach(server => {
-            server.bans.create(target.user, { reason: `${reason} - ${interaction.user.tag}`}).catch(err => {
-                num -= 1
-            })
-            num += 1;
+            server.bans.create(target.user, { reason: `${reason} - ${interaction.user.tag}`}).then(() => {
+                num += 1;
+            }).catch(err => { })
         })
         
-        const loggingchannel = await interaction.client.channels.fetch(utils.sendLogs('globalban')).catch(err => {})
+        const loggingChannel = await interaction.client.channels.fetch(sendLogs('globalban')).catch(err => {})
 
-        const embed = new Discord.MessageEmbed()
+        const embed = new EmbedBuilder()
             .setColor(embedcolour)
             .setTitle('Globally Banned Member')
             .setThumbnail(target.user.displayAvatarURL())
@@ -40,7 +39,7 @@ module.exports = {
             .setTimestamp()
             .setFooter({ text: `${footer} - Made By Cryptonized`, iconURL: interaction.guild.iconURL()});
         interaction.reply({embeds: [embed]})
-        if(loggingchannel) loggingchannel.send({embeds: [embed]}).catch(err => {})
+        if(loggingChannel) loggingChannel.send({embeds: [embed]}).catch(err => {})
         
 
     },

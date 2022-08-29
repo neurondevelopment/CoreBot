@@ -1,6 +1,5 @@
-const fetch = require('sync-fetch');
 const emojiStrip = require('emoji-strip')
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder } = require('discord.js')
 
 module.exports = {
     perms: [],
@@ -9,11 +8,11 @@ module.exports = {
         .setDescription('Encode a message with Base64')
         .addStringOption((option) => option.setName('message').setDescription('The message to be encoded').setRequired(true)),
     execute(interaction) {
-        const things = emojiStrip(interaction.options.get('message').value.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, ''));
+        const input = emojiStrip(interaction.options.getString('message').replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, ''));
 
-        const d = fetch(`https://some-random-api.ml/base64?encode=${things}`).json();
+        const encoded = Buffer.from(input, 'utf8').toString('base64');
 
-        interaction.reply({ content: `Your encoded message is \`${d.base64}\``, ephemeral: true})
+        interaction.reply({ content: `Your encoded message is \`${encoded}\``, ephemeral: true})
 
     },
 };

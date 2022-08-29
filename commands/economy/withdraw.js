@@ -1,6 +1,6 @@
-const db = require('quick.db');
+const { db } = require('../../index')
 const { currency, enabled } = require('../../config.json').economy
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder } = require('discord.js')
 
 module.exports = {
     perms: [],
@@ -8,10 +8,10 @@ module.exports = {
         .setName('withdraw')
         .setDescription('Take money out of your bank into your wallet')
         .addIntegerOption((option) => option.setName('amount').setDescription('The amount to bet').setRequired(true)),
-    execute(interaction) {
+    async execute(interaction) {
         if(!enabled) return;
-        const bank = db.get(`bank.${interaction.user.id}`);
-        let amount = interaction.options.get('amount').value;
+        const bank = await db.get(`bank.${interaction.user.id}`);
+        let amount = interaction.options.getInteger('amount');
 
         if (bank === null || bank < 1) return interaction.reply({ content: 'You do not have any money to withdraw!', ephemeral: true });
         
@@ -20,7 +20,7 @@ module.exports = {
         interaction.reply({ content:`Successfully withdrew ${amount}`, ephemeral: true });
 
 
-        db.subtract(`bank.${interaction.user.id}`, amount);
-        db.add(`wallet.${interaction.user.id}`, amount);
+        await db.sub(`bank.${interaction.user.id}`, amount);
+        await db.add(`wallet.${interaction.user.id}`, amount);
     },
 };

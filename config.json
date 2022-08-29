@@ -1,38 +1,32 @@
 {
     "token": "Discord Bot Token",
     "footer": "Neuron Development",
-    "serverID": "Discord Server ID",
-    "defaultEmbedColour": "RANDOM",
+    "serverID": "Server ID",
+    "defaultEmbedColour": "Random",
     "memberCountChannelName": "Members - ",
-    "memberCountChannel": "",
+    "memberCountChannel": "Channel ID",
     "joinChannel": "Channel ID",
     "joinMessage": "Hello {[USER]}, Welcome To {[SERVER]}",
     "leaveChannel": "Channel ID",
     "leaveMessage": "{[USER]} has left the server",
+    "autoroles": [],
     "status": {
-        "type": "WATCHING",
+        "type": "Watching",
         "content": "Neuron Development"
     },
     "tickets": {
         "ticketInfoColour": "#ff5050",
-        "transcriptChannelID": "863027560433713182",
+        "transcriptChannelID": "Channel ID",
         "enableTranscriptDMs": true
     },
     "stickyMessages": {
         "enabled": true,
-        "sendEvery": 5,
-        "perms": ""
-    },
-    "giveaways": {
-        "embedColour": "#FF0000",
-        "endEmbedColour": "#000000",
-        "reaction": "🎉",
-        "perms": ""
+        "sendEvery": 5
     },
     "logs": {
         "commandLogs": "Channel ID",
         "modLogs": "Channel ID",
-        "serverLogs": "Channel ID",
+        "serverLogs": "1013586546722619483",
         "joinLeaveLogs": "Channel ID"
     },
     "level": {
@@ -56,13 +50,13 @@
         "bonus": {
             "amount": 200,
             "timeout": 86400000,
-            "embedcolour": "RANDOM"
+            "embedcolour": "Random"
         },
         "work": {
             "jobs": "Teacher,Builder,Firefighter,Doctor,Chef,Mechanic,Pro Fortnite Player",
             "timeout": 600000,
-            "normalembedcolour": "RANDOM",
-            "hardembedcolour": "RANDOM",
+            "normalembedcolour": "Random",
+            "hardembedcolour": "Random",
             "workHardChance": 2,
             "minNormal": 250,
             "maxNormal": 750,
@@ -85,11 +79,18 @@
             ]
         },
         "captcha": {
-            "enabled": true,
-            "loggingChannelId": "856282362270056448",
-            "closedDmChannelId": "856282362270056448",
+            "enabled": false,
+            "loggingChannelId": "",
+            "closedDmChannelId": "",
             "memberRoles": [],
             "maximumTime": 3600000
+        },
+        "twitch": {
+            "enabled": false,
+            "channelId": "",
+            "clientId": "",
+            "clientSecret": "",
+            "streamers": [{ "streamer": "StreamerName", "message": "{streamer} is now live on Twitch! Go check them out at {url}", "colour": "Random" }]
         }
     },
     "commands": {
@@ -103,7 +104,7 @@
             "logs": "mod"
         },
         "globalunban": {
-            "embedcolour": "GREEN",
+            "embedcolour": "Green",
             "logs": "mod"
         },
         "globalkick": {

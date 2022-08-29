@@ -1,5 +1,5 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const utils = require('../../utils')
+const {  SlashCommandBuilder } = require('discord.js')
+
 module.exports = {
     perms: [],
     data: new SlashCommandBuilder()
@@ -11,7 +11,7 @@ module.exports = {
         const user = interaction.options.getMember('user')
         if(!interaction.channel.topic || !interaction.channel.topic.split('|')[1] || interaction.channel.topic.split('|')[2] !== 'ticket') return interaction.reply({ content: 'This is not a ticket channel!', ephemeral: true })        
         interaction.channel.permissionOverwrites.edit(user, {
-            VIEW_CHANNEL: true
+            ViewChannel: true
         })
         interaction.reply({ content: `Successfully added <@${userID}> to this ticket!` })
         

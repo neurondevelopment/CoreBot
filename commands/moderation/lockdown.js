@@ -1,23 +1,23 @@
-const discord = require('discord.js');
 const ms = require('ms');
 const {  footer } = require('../../config.json');
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const utils = require('../../utils')
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js')
+const { sendLogs } = require('../../utils')
 
 module.exports = {
     perms: [],
+    requirePermEmbed: true,
     data: new SlashCommandBuilder()
         .setName('lockdown')
         .setDescription('Prevent @everyone from speaking until the specified time is over, or manually overwritten')
         .addStringOption((option) => option.setName('time').setDescription('How long to lock the channel for').setRequired(false)),
     async execute(interaction) {
         const target = interaction.channel;
-        const time = interaction.options.get('time') ? interaction.options.get('time').value : '10m';
+        const time = interaction.options.getString('time') || '10m';
         if(!ms(time)) return interaction.reply({ content: 'Invalid time specified!', ephemeral: true });
 
-        await target.permissionOverwrites.edit(interaction.channel.guild.roles.everyone, { SEND_MESSAGES: false });
+        await target.permissionOverwrites.edit(interaction.channel.guild.roles.everyone, { SendMessages: false });
 
-        const announceEmbed = new discord.MessageEmbed()
+        const announceEmbed = new EmbedBuilder()
             .setColor('#f57c73')
             .setTitle(`Channel Locked`)
             .setThumbnail(`${interaction.guild.iconURL() || ''}`)
@@ -25,7 +25,7 @@ module.exports = {
             .setTimestamp()
             .setFooter({ text: footer, iconURL: interaction.guild.iconURL()})
 
-        const uannounceEmbed = new discord.MessageEmbed()
+        const uannounceEmbed = new EmbedBuilder()
             .setColor('#b1fc03')
             .setTitle(`Channel Unlocked`)
             .setThumbnail(`${interaction.guild.iconURL() || ''}`)
@@ -36,11 +36,11 @@ module.exports = {
         interaction.reply({embeds: [announceEmbed]})
 
         setTimeout(async () => {
-            await target.permissionOverwrites.edit(interaction.channel.guild.roles.everyone, { SEND_MESSAGES: null });
+            await target.permissionOverwrites.edit(interaction.channel.guild.roles.everyone, { SendMessages: null });
             interaction.channel.send({embeds: [uannounceEmbed]});
         }, ms(time) );
 
-        const logEmbed = new discord.MessageEmbed()
+        const logEmbed = new EmbedBuilder()
             .setColor('#f57c73')
             .setTitle('Channel Locked')
             .setDescription(`Channel <#${target.id}> was successfully locked down!`)
@@ -54,7 +54,7 @@ module.exports = {
             .setTimestamp()
             .setFooter({ text: footer, iconURL: interaction.guild.iconURL()});
 
-            const loggingchannel = await interaction.client.channels.fetch(utils.sendLogs('lockdown')).catch(err => { })
-            if(loggingchannel) loggingchannel.send({embeds: [logEmbed]})
+            const loggingChannel = await interaction.client.channels.fetch(sendLogs('lockdown')).catch(err => { })
+            if(loggingChannel) loggingChannel.send({embeds: [logEmbed]})
     },
 };

@@ -40,4 +40,11 @@ captcha:
 - If a user has their DMs closed, the bot will automatically kick them after 10 seconds, to prevent bots sitting in your server sending mass advertisements, it will send a message to your specified channel, but if you don't want to kick them, you could disable this in the code but it isn't recommended
 - The config is very straight forward, the only complicated thing may be the memberRoles array if you don't know how they work. Simply place the role IDs in an array, for example: "memberRoles": ["roleID1", "roleID2"]
 
-
+-----------------------------------------------------------------
+twitch:
+- Create an application at https://dev.twitch.tv/console/apps, use http://localhost as the redirect URL, and application integration as the type.
+- Take the Client ID and Client Secret from this page and enter it into your module config
+- For each streamer you wish to add, add the following object to the array { "streamer": "StreamerName", "message": "{streamer} is now live on Twitch! Go check them out at {url}", "colour": "Random" }
+- The StreamerName should be the users username on twitch. Colours must be put in PascalCase, for example RED is Red. 
+- The placeholders {streamer} and {url} will be automatically filled out for the message, so feel free to use these rather than manually typing out each streamers name and url. 
+- If you wish to do any customisation to the embed, it can be found in /modules/twitch.js

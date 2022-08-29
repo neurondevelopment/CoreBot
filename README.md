@@ -32,6 +32,9 @@ Some of the features:
 * Giveaway System
 * Announcement Embeds
 * Dropdown Role Selection
+* Captcha System
+* Game Server Status
+* Twitch Notifications
 * Autoroles
 
 <!-- GETTING STARTED -->
@@ -76,15 +79,24 @@ This is an example of how to list things you need to use the software and how to
    ```
    
 ### Permissions
-By default, every command is open for everyone, which is maybe not ideal for some commands such as moderation commands. 
+By default, every command is open for everyone, except for moderation commands. If you have not set any perms for the moderation commands, they will default to the Administrator permission.  
 In each command file, there is an array called perms, it looks like perms: []
-Inside, you can add either a role ID or a permission to use that command, a role id looking like "843429294848081920", or a permission looking like "ADMINISTRATOR"
+Inside, you can add either a role ID or a permission to use that command, a role id looking like "843429294848081920", or a permission looking like "Administrator"
 
 The final array should look something like
 ```js
-perms: ["843429294848081920", "MANAGE_MESSAGES"]
+perms: ["843429294848081920", "ManageMessages"]
 ```
 This will allow anyone with the role that has the ID 843429294848081920, or anyone with the manage messages permission to run this command
+
+You can find Discord's list of permissions [here](https://discord.com/developers/docs/topics/permissions#permissions-bitwise-permission-flags)
+All permission names must be converted from SCREAMING_SNAKE_CASE to PascalCase to work. For example MANAGE_MESSAGES should be ManageMessages
+
+### Bot Status
+In your config.json, find the status section and use one of the types found [here](https://discord-api-types.dev/api/discord-api-types-v10/enum/ActivityType) . Note that not all types will work.
+
+### Autoroles
+Simply add the role IDs to the array "autoroles" in the config.json. For example "autoroles": ["RoleID1", "RoleID2"]
 
 ### Dropdown Roles
 They can be set / updated by running the `/sync` command

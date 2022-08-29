@@ -1,42 +1,39 @@
-const discord = require('discord.js');
-const utils = require('../../utils.js');
-const db = require('quick.db');
+const { sendLogs } = require('../../utils')
+const { db } = require('../../index')
 const {  footer } = require('../../config.json');
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js')
 
 module.exports = {
     perms: [],
+    requirePermEmbed: true,
     data: new SlashCommandBuilder()
         .setName('serverunlock')
         .setDescription('Unlocks the server'),
     async execute(interaction) {
-
-        const all = db.get(`settings_${interaction.guild.id}.locked`);
-        interaction.guild.channels.cache.forEach(async (channel, id) => {
-            try {
-                if(all.indexOf(channel.id) >= 0) {
-                    await channel.permissionOverwrites.edit(interaction.channel.guild.roles.everyone, {
-                        SEND_MESSAGES: null,
-                     });
-                }
+        await interaction.deferReply({ ephemeral: true })
+        const all = await db.get(`settings_${interaction.guild.id}.locked`);
+        for(let i = 0; i < all.length; i++) {
+            const channelId = all[i]
+            const channel = await interaction.client.channels.fetch(channelId).catch(err => {})
+            if(channel) {
+                await channel.permissionOverwrites.edit(interaction.channel.guild.roles.everyone, {
+                    SendMessages: null,
+                });
             }
-            catch {
-                // caught idk
-            }
-         });
+        }
 
-         const embed = new discord.MessageEmbed()
-         .setColor('GREEN')
-         .setTitle(`Server Unlocked`)
-         .setThumbnail(`${interaction.guild.iconURL() || ''}`)
-         .setDescription(`This server was unlocked`)
-         .setTimestamp()
-         .setFooter({ text: footer, iconURL: interaction.guild.iconURL()})
+        const embed = new EmbedBuilder()
+            .setColor('Green')
+            .setTitle(`Server Unlocked`)
+            .setThumbnail(`${interaction.guild.iconURL() || ''}`)
+            .setDescription(`This server was unlocked`)
+            .setTimestamp()
+            .setFooter({ text: footer, iconURL: interaction.guild.iconURL()})
 
-         interaction.reply({embeds: [embed]});
+        interaction.editReply({embeds: [embed]});
 
-          const logEmbed = new discord.MessageEmbed()
-            .setColor('GREEN')
+        const logEmbed = new EmbedBuilder()
+            .setColor('Green')
             .setTitle('Server Locked')
             .setDescription(`The server was successfully unlocked!`)
             .setThumbnail(interaction.guild.iconURL())
@@ -48,7 +45,7 @@ module.exports = {
             .setTimestamp()
             .setFooter({ text: footer, iconURL: interaction.guild.iconURL()})
 
-            const loggingchannel = await interaction.client.channels.fetch(utils.sendLogs('lockdown')).catch(err => { })
-            if(loggingchannel) loggingchannel.send({embeds: [logEmbed]})
-        }
+        const loggingChannel = await interaction.client.channels.fetch(sendLogs('lockdown')).catch(err => { })
+        if(loggingChannel) loggingChannel.send({embeds: [logEmbed]})
+    }
 };

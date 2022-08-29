@@ -1,21 +1,22 @@
-const Discord = require('discord.js');
-const db = require('quick.db')
+const { db } = require('../../index')
 const { footer } = require('../../config.json')
 const { embedcolour } = require('../../config.json').commands.kick
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const utils = require('../../utils')
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js')
+const { sendLogs, checkPerms } = require('../../utils')
 
 module.exports = {
     perms: [],
+    requirePermEmbed: true,
     data: new SlashCommandBuilder()
         .setName('kick')
         .setDescription('Kick a user from the server')
         .addUserOption((option) => option.setName('user').setDescription('The user to kick').setRequired(true))
         .addStringOption((option) => option.setName('reason').setDescription('The reason for the kick').setRequired(false)),
     async execute(interaction) {
-
-        const reason = interaction.options.get('reason') ? interaction.options.get('reason').value : 'No reason specified'
-        const target = await interaction.guild.members.fetch(interaction.options.get('user').value)
+        const reason = interaction.options.getString('reason') || 'No reason specified'
+        const target = interaction.options.getMember('user')
+        const permCheck = checkPerms(interaction.member, target)
+        if(permCheck) return interaction.reply({ content: permCheck, ephemeral: true })
 
         const today = new Date();
         const dateTime = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
@@ -28,7 +29,7 @@ module.exports = {
             })
         if(fail) return;
             
-        const embed = new Discord.MessageEmbed()
+        const embed = new EmbedBuilder()
             .setColor(embedcolour)
             .setTitle('Kicked Member')
             .setThumbnail(target.user.displayAvatarURL())
@@ -42,9 +43,9 @@ module.exports = {
             .setFooter({ text: `${footer} - Made By Cryptonized`, iconURL: interaction.guild.iconURL()});
 
         interaction.reply({embeds: [embed]})
-        const loggingchannel = await interaction.client.channels.fetch(utils.sendLogs('kick')).catch(err => { })
-        if(loggingchannel) loggingchannel.send({embeds: [embed]})
-        db.push(`kicks_${target.id}`, `**${reason}** - ${interaction.user.tag} - ${dateTime}`)
+        const loggingChannel = await interaction.client.channels.fetch(sendLogs('kick')).catch(err => { })
+        if(loggingChannel) loggingChannel.send({embeds: [embed]})
+        await db.push(`kicks_${target.id}`, `**${reason}** - ${interaction.user.tag} - ${dateTime}`)
 
 
 

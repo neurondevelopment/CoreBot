@@ -1,11 +1,11 @@
-const Discord = require('discord.js');
 const { footer } = require('../../config.json')
 const { embedcolour } = require('../../config.json').commands.globalban
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const utils = require('../../utils')
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js')
+const { sendLogs, checkPerms } = require('../../utils')
 
 module.exports = {
     perms: [],
+    requirePermEmbed: true,
     data: new SlashCommandBuilder()
         .setName('globalban-id')
         .setDescription('Ban a user via their ID from all servers the bot is in')
@@ -16,6 +16,12 @@ module.exports = {
         const target = interaction.options.getString('userid')
         let num = 0;
 
+        const member = await interaction.guild.members.fetch(target).catch(err => { })
+        if(member) {
+            const permCheck = checkPerms(interaction.member, member)
+            if(permCheck) return interaction.reply({ content: permCheck, ephemeral: true })
+        }
+
         interaction.client.guilds.cache.forEach(server => {
             server.bans.create(target, { reason: `${reason} - ${interaction.user.tag}`}).then(() => {
                 num += 1;
@@ -23,9 +29,9 @@ module.exports = {
         })
 
         
-        const loggingchannel = await interaction.client.channels.fetch(utils.sendLogs('globalban')).catch(err => {})
+        const loggingChannel = await interaction.client.channels.fetch(sendLogs('globalban')).catch(err => {})
 
-        const embed = new Discord.MessageEmbed()
+        const embed = new EmbedBuilder()
             .setColor(embedcolour)
             .setTitle('Globally Banned Member')
             .setDescription(`Successfully banned <@${target}> (\`${target}\`) from ${num} servers for \`${reason}\``)
@@ -36,6 +42,6 @@ module.exports = {
             .setTimestamp()
             .setFooter({ text: `${footer} - Made By Cryptonized`, iconURL: interaction.guild.iconURL()});
         interaction.reply({embeds: [embed]})
-        if(loggingchannel) loggingchannel.send({embeds: [embed]}).catch(err => {})
+        if(loggingChannel) loggingChannel.send({embeds: [embed]}).catch(err => {})
     },
 };

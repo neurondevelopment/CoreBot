@@ -1,7 +1,6 @@
-const db = require('quick.db');
-const Discord = require('discord.js');
+const { db } = require('../../index')
 const { currency, enabled } = require('../../config.json').economy
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js')
 
 module.exports = {
     perms: [],
@@ -9,18 +8,20 @@ module.exports = {
         .setName('balance')
         .setDescription('Check balance of yourself or someone else')
         .addUserOption((option) => option.setName('user').setDescription('The user\'s balance to check').setRequired(false)),
-    execute(interaction) {
+    async execute(interaction) {
         if(!enabled) return;
-        const user = interaction.options.get('user') ? interaction.client.users.cache.get(interaction.options.get('user').value) : interaction.user
-        let wallet = db.get(`wallet.${user.id}`) || 0;
+        const user = interaction.options.getString('user') || interaction.user
+        let wallet = await db.get(`wallet.${user.id}`) || 0;
 
-        let bank = db.get(`bank.${user.id}`) || 0;
+        let bank = await db.get(`bank.${user.id}`) || 0;
 
-        const balEmbed = new Discord.MessageEmbed()
-            .setColor('RANDOM')
+        const balEmbed = new EmbedBuilder()
+            .setColor('Random')
             .setAuthor({ name: `${user.username}'s Balance`, iconURL: user.displayAvatarURL()})
-            .addField('**Wallet**', wallet.toString())
-            .addField('**Bank**', bank.toString())
+            .addFields([
+                { name: '**Wallet**', value: wallet.toString() },
+                { name: '**Bank**', value: bank.toString() }
+            ])
             .setDescription(`Currency - ${currency}`)
             .setFooter({ text: `Requested by: ${interaction.user.tag}`})
         interaction.reply({embeds: [balEmbed]});

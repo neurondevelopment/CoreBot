@@ -1,5 +1,4 @@
-const fetch = require('sync-fetch');
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder } = require('discord.js')
 
 module.exports = {
     perms: [],
@@ -8,9 +7,11 @@ module.exports = {
         .setDescription('Decode a Base64 message')
         .addStringOption((option) => option.setName('message').setDescription('The encoded message to be decoded').setRequired(true)),
     execute(interaction) {
-        const d = fetch(`https://some-random-api.ml/base64?decode=${interaction.options.get('message').value}`).json();
+        const input = interaction.options.getString('message')
 
-        interaction.reply({ content: `Your decoded message is: \`${d.text}\``, ephemeral: true });
+        const decoded = Buffer.from(input, 'base64').toString('utf8');
+
+        interaction.reply({ content: `Your decoded message is: \`${decoded}\``, ephemeral: true });
 
     },
 };
