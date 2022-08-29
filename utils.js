@@ -30,6 +30,15 @@ module.exports = {
         if(target.permissions.has('Administrator')) return `You cannot run this command on an administrator`
         if(!target.bannable) return `I do not have permission to ban this user`
         if(member.roles.highest.position < target.roles.highest.position) return `That user has a role higher than you!`
+    },
+    formatTimestamp: function(timestamp) {
+        const date = new Date(timestamp)
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+        const hour = date.getHours();
+        const minute = date.getMinutes();
+        return `${day}/${month}/${year} ${hour}:${minute}`
     }
 
 };
