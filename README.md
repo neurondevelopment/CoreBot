@@ -67,7 +67,7 @@ This is an example of how to list things you need to use the software and how to
    ```
    https://discord.com/api/oauth2/authorize?client_id=YOURCLIENTID&permissions=8&scope=applications.commands%20bot
    ```
-5. In the discord developer dashboard, where you created your bot and got its token, scroll down to 'Privileged Gateway Intents' and tick the SERVER MEMBERS intent.
+5. In the discord developer dashboard, where you created your bot and got its token, scroll down to 'Privileged Gateway Intents' and tick the SERVER MEMBERS and MESSAGE CONTENT intent.
 6. Starting the bot
    ```sh
    node .
