@@ -23,7 +23,7 @@ module.exports = {
                 failed = true;
                 interaction.reply({ content: 'Unable to ban that user', ephemeral: true })
             })
-        if(fail) return;
+        if(failed) return;
         const embed = new EmbedBuilder()
             .setColor(embedcolour)
             .setTitle('Banned Member')
