@@ -7,9 +7,9 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('infractions')
         .setDescription('Check a user\'s infractions')
-        .addUserOption((option) => option.setName('user').setDescription('The user\'s balance to check').setRequired(false)),
+        .addUserOption((option) => option.setName('user').setDescription('The user to check infractions of').setRequired(false)),
     async execute(interaction) {
-        const target = interaction.options.getString('user') || interaction.user.id
+        const target = interaction.options.getUser('user') || interaction.user.id
         const warnings = await db.get(`warnings_${target}`) || ['None'];
         const kicks = await db.get(`kicks_${target}`) || ['None'];
         let number = warnings.length;
