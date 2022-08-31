@@ -1,5 +1,6 @@
 const { InteractionType, EmbedBuilder } = require('discord.js')
 let commandLogChannel
+const { footer } = require('../config.json')
 const { commandLogs } = require('../config.json').logs
 
 module.exports = {

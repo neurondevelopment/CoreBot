@@ -1,6 +1,7 @@
 let serverLogChannel
 const { serverLogs } = require('../config.json').logs
 const { EmbedBuilder } = require('discord.js')
+const { footer } = require('../config.json')
 
 module.exports = {
     name: 'roleUpdate',

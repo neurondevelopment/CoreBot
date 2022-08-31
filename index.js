@@ -99,9 +99,9 @@ client.on('ready', async () => {
     setInterval(async () => {
         const roleDB = JSON.parse(fs.readFileSync('./db/temproles.json'))
         for(const guildID in roleDB) {
+            const guild = await client.guilds.fetch(guildID).catch(err => {})
+            if(!guild) return error('Temp Role', `Guild not found: ${guildID}`)
             for(const userID in roleDB[guildID]) {
-                const guild = await client.guilds.fetch(guildID).catch(err => {})
-                if(!guild) return error('Temp Role', `Guild not found: ${guildID}`)
                 const member = await guild.members.fetch(userID).catch(err => {})
                 if(!member) delete roleDB[guildID][userID]
                 roleDB[guildID][userID].forEach(async role => {

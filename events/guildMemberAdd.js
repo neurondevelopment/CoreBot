@@ -1,7 +1,7 @@
 let serverLogChannel
 let joinLeaveLogChannel
 const { EmbedBuilder } = require('discord.js')
-const { autoroles, joinChannel, joinMessage } = require('../config.json')
+const { autoroles, joinChannel, joinMessage, footer } = require('../config.json')
 const { serverLogs, joinLeaveLogs } = require('../config.json').logs
 
 module.exports = {
