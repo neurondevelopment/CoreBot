@@ -14,14 +14,11 @@ module.exports = {
     async execute(interaction) {
         const reason = interaction.options.getString('reason') || 'No reason specified'
         const target = interaction.options.getMember('user')
-        let num = 0;
         const permCheck = checkPerms(interaction.member, target)
         if(permCheck) return interaction.reply({ content: permCheck, ephemeral: true })
         
         interaction.client.guilds.cache.forEach(server => {
-            server.bans.create(target.user, { reason: `${reason} - ${interaction.user.tag}`}).then(() => {
-                num += 1;
-            }).catch(err => { })
+            server.bans.create(target.user, { reason: `${reason} - ${interaction.user.tag}`})
         })
         
         const loggingChannel = await interaction.client.channels.fetch(sendLogs('globalban')).catch(err => {})
@@ -30,7 +27,7 @@ module.exports = {
             .setColor(embedcolour)
             .setTitle('Globally Banned Member')
             .setThumbnail(target.user.displayAvatarURL())
-            .setDescription(`Successfully banned \`${target.user.username}\` from ${num} servers for \`${reason}\``)
+            .setDescription(`Successfully banned \`${target.user.username}\` from ${interaction.client.guilds.cache.size} servers for \`${reason}\``)
             .addFields(
                 { name: 'User\'s Discord', value: `${target.user.tag}`, inline: true },
                 { name: 'User\'s ID', value: `${target.user.id}`, inline: true },
