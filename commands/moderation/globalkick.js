@@ -18,11 +18,20 @@ module.exports = {
         const permCheck = checkPerms(interaction.member, target)
         if(permCheck) return interaction.reply({ content: permCheck, ephemeral: true })
 
-        interaction.client.guilds.cache.forEach(server => {
-            server.members.cache.get(target.user.id).kick(`${reason} - ${interaction.user.tag}`).catch(err => {
-                num -= 1
-            });
-            num += 1;
+        interaction.client.guilds.cache.forEach(async server => {
+            try {
+                const member = await server.members.fetch(target.user.id).catch(err => { })
+                if(member && member.kickable) {
+                    await member.kick(`${reason} - ${interaction.user.tag}`)
+                    num++
+                }
+                else {
+                    num--
+                }
+            }
+            catch {
+                num--
+            }
         })
         const loggingChannel = await interaction.client.channels.fetch(sendLogs('globalkick')).catch(err => { })
         const embed = new EmbedBuilder()

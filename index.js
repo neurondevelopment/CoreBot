@@ -103,7 +103,7 @@ client.on('ready', async () => {
             if(!guild) return error('Temp Role', `Guild not found: ${guildID}`)
             for(const userID in roleDB[guildID]) {
                 const member = await guild.members.fetch(userID).catch(err => {})
-                if(!member) delete roleDB[guildID][userID]
+                if(!member) return delete roleDB[guildID][userID]
                 roleDB[guildID][userID].forEach(async role => {
                     if(role.time < Date.now()) {
                         member.roles.remove(role.role)
