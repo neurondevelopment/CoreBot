@@ -1,3 +1,5 @@
+const { ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js')
+
 module.exports = {
     name: 'claim',
     async execute(interaction, args) {
@@ -9,7 +11,7 @@ module.exports = {
             }
         })
         if(!done) {
-            interaction.reply({ content: 'You are not allowed to unclaim this ticket!', ephemeral: true })
+            interaction.reply({ content: 'You are not allowed to claim this ticket!', ephemeral: true })
         }
         else {
             //interaction.message.channel.setName(`${interaction.user.username}-claimed`)

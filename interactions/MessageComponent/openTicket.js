@@ -1,16 +1,20 @@
+const { ChannelType, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js')
+const { ticketInfoColour } = require('../../config.json').tickets
+const { footer } = require('../../config.json')
+
 module.exports = {
     name: 'openTicket',
     async execute(interaction, args) {
         await interaction.deferReply({ ephemeral: true})
-        const tickets = require('./db/tickets.json')
+        const tickets = require('../../db/tickets.json')
         const ticket = tickets[interaction.message.embeds[0].title]
         const user = interaction.user
         interaction.message.guild.channels.create({
             name: user.username,
-            type: 'text',
+            type: ChannelType.GuildText,
             parent: ticket.categoryID,
             topic: `${interaction.user.id}|${ticket.supportroles.join(',')}|ticket`
-        }).then(chann => {
+        }).then(async chann => {
             interaction.editReply({ content: `Your ticket can be found here: <#${chann.id}>`})
             chann.permissionOverwrites.edit(user, {
                 ViewChannel: true

@@ -1,4 +1,5 @@
 let serverLogChannel
+const { EmbedBuilder } = require('discord.js')
 const { serverLogs } = require('../config.json').logs
 
 module.exports = {

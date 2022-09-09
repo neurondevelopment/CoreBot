@@ -40,7 +40,7 @@ module.exports = {
                 args.shift() // Remove the actual ID
             }
             const interactionFile = require(`./interactions/${InteractionType[interaction.type]}/${customId}`)
-            interactionFile.execute(interaction, args, logChann)
+            interactionFile.execute(interaction, args)
         }
     }
 }

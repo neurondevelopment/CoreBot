@@ -1,5 +1,6 @@
 const { generateCode } = require('../../utils');
 const { enableTranscriptDMs, transcriptChannelID } = require('../../config.json').tickets
+const fs = require('fs')
 
 module.exports = {
     name: 'close',
@@ -19,7 +20,7 @@ module.exports = {
                     fs.appendFileSync(`./${code}.txt`, `${author} - ${content}\n`)
                 }
             })
-            const ticket = require('./db/tickets.json')[interaction.message.embeds[0].fields[1].value]
+            const ticket = require('../../db/tickets.json')[interaction.message.embeds[0].fields[1].value]
             if(!ticket) return interaction.reply({ content: 'ERROR! Could not find this ticket type in the config?', ephemeral: true })
             owner2.send({ content: `${ticket.closeMessage}`, files: [`./${code}.txt`] }).then(async () => {
                 const logChannel = interaction.client.channels.cache.get(transcriptChannelID);
