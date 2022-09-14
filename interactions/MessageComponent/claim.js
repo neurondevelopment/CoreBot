@@ -29,13 +29,13 @@ module.exports = {
                 .setLabel("Close Ticket")
                 .setCustomId(`close`)
                 .setEmoji('🔒')
-                .toJSON()
+
             const button2 = new ButtonBuilder()
                 .setStyle(ButtonStyle.Danger)
                 .setLabel("Unclaim Ticket")
                 .setCustomId(`unclaim`)
                 .setEmoji('🔑')
-                .toJSON()
+
             const buttonRow = new ActionRowBuilder()
                 .addComponents(button1, button2)
 

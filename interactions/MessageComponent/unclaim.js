@@ -1,3 +1,5 @@
+const { ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js')
+
 module.exports = {
     name: 'unclaim',
     async execute(interaction, args) {
@@ -24,13 +26,13 @@ module.exports = {
             .setLabel("Close Ticket")
             .setCustomId(`close`)
             .setEmoji('🔒')
-            .toJSON()
+
         const button2 = new ButtonBuilder()
             .setStyle(ButtonStyle.Primary)
             .setLabel("Claim Ticket")
             .setCustomId(`claim`)
             .setEmoji('🔑')
-            .toJSON()
+
         const buttonRow = new ActionRowBuilder()
             .addComponents(button1, button2)
 
