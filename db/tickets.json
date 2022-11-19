@@ -9,7 +9,7 @@
         "embed": {
             "description": "This is an example ticket, click the button below to create!",
             "colour": "Aqua",
-            "image": ""
+            "image": null
         },
         "button": {
             "label": "Open Ticket",
