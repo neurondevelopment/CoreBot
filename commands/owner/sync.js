@@ -19,8 +19,9 @@ module.exports = {
             function gen() {
                 const embed = new EmbedBuilder()
                     .setTitle(ticket)
-                    .setColor(curr.colour)
+                    .setColor(curr.embed.colour)
                     .setDescription(curr.embed.description)
+                    .setImage(curr.embed.image)
                     .setFooter({ text: `${footer} - Made By Cryptonized`})
                 const button = new ButtonBuilder()
                     .setCustomId('openTicket')
