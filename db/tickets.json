@@ -8,7 +8,7 @@
         "closeMessage": "Your ticket has been closed",
         "embed": {
             "description": "This is an example ticket, click the button below to create!",
-            "colour": "AQUA",
+            "colour": "Aqua",
             "image": ""
         },
         "button": {
